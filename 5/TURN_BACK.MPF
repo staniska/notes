@@ -1,0 +1,54 @@
+;CNMG 120408
+
+G0 X200 Z100
+T1
+LIMS=1200
+G96 M3 S120 F0.4
+
+G0 X105 Z0
+G1 X40
+X25 F0.3
+X15 F0.2
+X5 F0.15
+X=-2*$P_TOOLR F0.12
+Z=IC(1) F0.4
+G0 X=95-2.5
+G42 G1 Z0
+X95 CHR=1
+Z-40
+X102 ANG=160
+G40 X=IC(2) ANG=70
+G0 X200 Z100
+
+
+M30
+
+;This comment is automatically created by sinumerik-highlight package
+;{
+;  "blank": {
+;    "name": "BLANK"
+;  },
+;  "contour": {
+;    "name": "CONTOUR_B"
+;  },
+;  "machine": {
+;    "machineName": "HNK_28X16",
+;    "machineType": "Lathe",
+;    "cnc": "SINUMERIK",
+;    "subType": "Horizontal",
+;    "firstCarriage": {
+;      "position": "Front",
+;      "axisY": false,
+;      "drivedTool": false,
+;      "coolantOn": "M8",
+;      "coolantOff": "M9",
+;      "toolChange": "M6"
+;    },
+;    "diam90": false,
+;    "firstSpindle": {
+;      "name": "C1",
+;      "num": "1"
+;    }
+;  }
+;}
+;End of comment created by sinumerik-highlight package

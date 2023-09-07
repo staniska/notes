@@ -1,0 +1,95 @@
+;CNMG 120408
+
+G0 X200 Z100
+T1
+LIMS=1200
+G96 M3 S120 F0.4
+
+G0 X105 Z0
+G1 X40
+X25 F0.3
+X15 F0.2
+X5 F0.15
+X=-2*$P_TOOLR F0.12
+Z=IC(1) F0.4
+
+TRANS Z0.5 X0.5
+G0 X120 Z20
+
+R1=96
+CYCLE:
+G0 X120 Z20
+X=R1 Z1
+IF R1>=95
+  G1 Z-30
+  GOTOF END_CYCLE
+ENDIF
+IF R1>=95-2*7
+  G1 Z=-47+SQRT(49-POT((R1-(95-2*7))/2))
+  GOTOF END_CYCLE
+ENDIF
+IF R1>=40+2*20*TAN(30)
+  G1 Z=-40
+  GOTOF END_CYCLE
+ENDIF
+IF R1>=40
+  G1 Z=-20-(R1-40)/2/TAN(30)
+  GOTOF END_CYCLE
+ENDIF
+G1 Z=-11.648+SQRT(POT(12)-POT((R1-16.227)/2))
+
+END_CYCLE:
+G1 X=IC(2) ANG=45
+G0 X120 Z20
+R1=R1-4
+IF R1>=24 GOTOB CYCLE
+TRANS
+G0 X98
+Z=-40-7.5
+G41 G1 X95
+Z-40 RND=7
+X=40+2*20*TAN(30)
+Z=IC(10) ANG=-25
+G40 G1 X=IC(2) ANG=65
+G0 Z1
+X21
+G42 G1 Z0
+X22
+G3 X40 Z-10 CR=12
+G1 Z-20
+Z-40 ANG=150
+X=IC(2)
+G40 Z=IC(1)
+G0 X200 Z100
+
+M30
+
+;This comment is automatically created by sinumerik-highlight package
+;{
+;  "blank": {
+;    "name": "BLANK_F"
+;  },
+;  "contour": {
+;    "name": "CONTOUR"
+;  },
+;  "machine": {
+;    "machineName": "HNK_28X16",
+;    "machineType": "Lathe",
+;    "cnc": "SINUMERIK",
+;    "subType": "Horizontal",
+;    "firstCarriage": {
+;      "position": "Front",
+;      "axisY": false,
+;      "drivedTool": false,
+;      "coolantOn": "M8",
+;      "coolantOff": "M9",
+;      "toolChange": "M6"
+;    },
+;    "diam90": false,
+;    "firstSpindle": {
+;      "name": "C1",
+;      "num": "1"
+;    }
+;  }
+;}
+;End of comment created by sinumerik-highlight package
