@@ -1,0 +1,103 @@
+
+R10=500 ;Диаметр
+R11=20  ;Глубина на сторону
+R12=480 ;Средний диаметр
+R13=20  ;Ширина нитки на среднем диаметре
+R14=3 ;Угол левой стороны
+R15=45 ;Угол правой стороны
+R16=1  ;Верхний левый радиус
+R17=4  ;Верхний правый радиус
+R18=1.5 ;Нижний левый радиус
+R19=2   ;Нижний правый радиус
+
+R20=30   ;Начальная точка по Z
+R21=-200 ;Конечная точка по Z
+
+R22=0.2  ;Шаг по контуру
+R23=0.4  ;Радиус при вершине резца
+R24=3    ;Ширина резца
+
+G0 X=R10+100
+G95 M3 S100 F1
+
+R1=R10
+CYCLE:
+;Расчет правой стороны
+;Проверяем верхний радиус
+IF R1>=R10-2*R17+2*(R17+R23)*SIN(R15)-2*R23
+  R32=R20+(R10-R12)/2*(TAN(R14)+TAN(R15))+R13+R17*TAN((90-R15)/2)+R23-SQRT(POT(R17+R23)-POT(R17+R23-(R10-R1)/2))
+  ;----------
+  R33=ACOS((R17+R23-(R10-R1)/2)/(R17+R23)) ;угол текущего прохода
+  R34=R33+R22/(R17*3.1415/180)  ;Угол следующего прохода
+  R35=R17*(COS(R33)-COS(R34))  ;Шаг к следующему проходу
+  ;----------
+  GOTOF END_RIGHT
+ENDIF
+;Проверяем конус
+IF R1>=R10-2*R11+2*(R19-R23)-2*(R19-R23)*SIN(R15)
+  R32=R20+(R10-R12)/2*(TAN(R14)+TAN(R15))+R13-(R10-R1)/2*TAN(R15)+R23*(1-TAN((90-R15)/2))
+  ;--------
+  R35=R22*COS(R15)
+  ;--------
+  GOTOF END_RIGHT
+ENDIF
+;Нижний радиус
+R32=R20+(R10-R12)/2*(TAN(R14)+TAN(R15))+R13-R11*TAN(R15)-R19*TAN((90-R15)/2)+R23+SQRT(POT(R19-R23)-POT(R19-R23-(R1-(R10-2*R11))/2))
+;------------
+R33=ACOS((R19-R23-(R1-(R10-2*R11))/2)/(R19-R23))  ;угол текущего прохода
+R34=R33-R22/(R19*3.1415/180)  ;Угол следующего прохода
+R35=R19*(COS(R34)-COS(R33)) ;Шаг к следующему проходу
+;------------
+END_RIGHT:
+R32=R32-R24 ;Поправка на ширину резца
+
+;--------
+G0 X=R10+20
+Z=R32
+X=R1
+G33 Z=R21 K40
+G0 X=R10+20
+;--------
+IF R35<0.01
+  R35=0.01
+ENDIF
+R1=R1-R35*2
+IF ((R1<R10-2*(R11)) AND (R1>R10-2*(R11+R35)))
+  R1=R10-2*R11
+ENDIF
+IF R1>=R10-2*R11 GOTOB CYCLE
+
+
+G0 X1000
+
+M30
+
+;This comment is automatically created by sinumerik-highlight package
+;{
+;  "blank": {
+;    "name": "BLANK"
+;  },
+;  "contour": {
+;    "name": "CONTOUR"
+;  },
+;  "machine": {
+;    "machineName": "Lathe_rear",
+;    "machineType": "Lathe",
+;    "cnc": "SINUMERIK",
+;    "subType": "Horizontal",
+;    "firstCarriage": {
+;      "position": "Rear",
+;      "axisY": false,
+;      "drivedTool": false,
+;      "coolantOn": "M8",
+;      "coolantOff": "M9",
+;      "toolChange": "M6"
+;    },
+;    "diam90": false,
+;    "firstSpindle": {
+;      "name": "C1",
+;      "num": "1"
+;    }
+;  }
+;}
+;End of comment created by sinumerik-highlight package
